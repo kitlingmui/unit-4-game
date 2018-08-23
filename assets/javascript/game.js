@@ -81,7 +81,7 @@ function updateDisplay(){
     $("#enemies").text('')
     for (let i = 0; i < enemiesList.length; i++) {
         $("#enemies").append(`
-            <div class="icon-e" data-icon="${i}">  
+            <div class="icon-e" data-icone="${i}">  
                 <li>${enemiesList[i].name}</li>
                     <img class="characterimg" src="./assets/images/${enemiesList[i].picid}c.jpg" alt="${enemiesList[i].picid}c">
                 <li>${enemiesList[i].hp}</li>
@@ -131,7 +131,7 @@ function attack(){
             alert('win')
             $("#result").html(`<p>You have defated ${defender.name}, you can choose to fight another enemy</p>`)
         }
-        updateDisplay();
+        updateDisplay() 
     }
 }
         
@@ -152,27 +152,27 @@ $(".icon-c").on("click", function(){
             enemiesList.push(characterList[i])
         }
     } 
+
     defender = enemiesList[0]
     updateDisplay();
+
+    var index = enemiesList.indexOf(defender)
+
+    if (index > -1) {
+        enemiesList.splice(index, 1)
+        updateDisplay();
     }
-})
+    }
+
+    })
 
 
-// To be fixed when on click enemies icon, now is hard code
-// // When on enemies list icon
+// // When on enemies list icon -- to be fixed
 // $(".icon-e").on("click", function(){
-//     console.log($(this))
-//     // console.log($(this).attr("data-icone"))
-//     // if (defender.length === 0 ) {
-//     // // set your character
-//     // defender = enemiesList[$(this).attr("data-icon")]
-//     // console.log(defender)
-//     // updateDisplay();
-//     // alert("you select enemies")
-//     // console.log($(this).attr("data-icon"))
-//     // defender = enemiesList[$(this).attr("data-icon")]
-//     // updateDisplay();   
+//     defender = enemiesList.indexOf($(".icon-e").attr("data-icone"))
+//     var index = enemiesList.indexOf(defender);
+//     if (index > -1) {
+//     enemiesList.splice(index, 1);
+//     updateDisplay();
+//     }
 // })
-    
-
-
