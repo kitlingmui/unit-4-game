@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Star Wars RPG Game</title>
+    <link rel="stylesheet" type="text/css" href="./assets/css/style.css">
+    <link rel="stylesheet" type="text/css" href="./assets/css/reset.css">
+</head>
+
+<body>
+
+    <header id="welcome">Star Wars RPG</header>
+
+    <!-- charlist -->
+    <div class="container"> 
+        <div class="row charlist">
+            <div class="col-md-12" id="clist"></div>
+        </div> 
+    </div>
+
+    <!-- your char -->
+    <div class="container" > 
+        <div>Your Character</div>
+        <div class="row yourchar">
+            <div class="col-md-12" id="yourchar">              
+            </div>
+        </div>       
+    </div>
+
+    <!-- your Enemies -->
+    <div class="container">
+        <div>Enemies Available To Attack</div>
+        <div class="row enemies">
+                <div class="col-md-12" id="enemies"></div>
+        </div>
+    </div>
+
+    <!-- Fight section -->
+    <div class="container" id="fight">
+        <div>Fight Section</div>
+        <button onclick="attack()">Attack</button>
+    </div>
+
+    <!-- Defender -->
+    <div class="container" >  
+        <div>Defender</div>
+        <div class="row yourchar">
+            <div class="col-md-12" id="defender"></div>
+        </div>   
+    </div>
+
+    <!-- Game Result -->
+    <div class="container" >
+        <div id="result"></div>
+    </div>
+
+    <!-- Reset Game-->
+    <div class="container" id="resetgame">
+        <button onclick="reset()">Reset</button>   
+    </div>
+    
+ 
+   
+
+    <script src='https://code.jquery.com/jquery-3.3.1.js' integrity='sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=' crossorigin='anonymous'></script>
+    <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js' integrity='sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T'crossorigin='anonymous'></script>
+    <script src="https://cdn.rawgit.com/nnattawat/flip/master/dist/jquery.flip.min.js"></script>
+    <script src="./assets/javascript/game.js"></script>
+</body>
+</html>
