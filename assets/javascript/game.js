@@ -5,10 +5,11 @@ var character = '';
 var defender = '';
 var yattack = 0;
 var eattack = 0;
-var ytotal = 0;
+var processStatus = 'standby';
+var killedname = ''
+var yattackCount = 0;
 var gameover = false;
-var isDefenderWin = true; // true = defender win, false = defender lose
-var killed = ''
+var gamestatus = '';
 
 
 // Reset Game
@@ -17,11 +18,13 @@ function reset(){
     characterList.length = 0;
     character = '';
     defender = '';
-    killed = ''
     yattack = 0;
     eattack = 0;
-    ytotal = 0;
+    processStatus = 'standby';
+    killedname = ''
+    yattackCount = 0;
     gameover = false;
+    gamestatus = '';
 
     characterList = [
         {
@@ -86,14 +89,13 @@ function updateDisplay(){
                     <li>${enemiesList[i].hp}</li>
                 </div>`)
         } 
-    } 
+    }
+    else{
+        $('#enemies').text('')
+    }
 
     //display your defender
     if (defender.length !== 0) {
-        if (!isDefenderWin){
-            $('#defender').text('')
-        }    
-        else {
             $("#defender").html(`
                 <div class="icon-d" data-icond="d">  
                     <li>${defender.name}</li>
@@ -101,57 +103,77 @@ function updateDisplay(){
                     <li>${defender.hp}</li>
                 </div>`
             )
-        }
+            $("#result").text('')
     }
+    else {
+        $('#defender').text('')
+    }
+    
 
     // check status and update display
-    if ( (yattack !== 0) && (eattack !== 0) && (character.hp > 0) ) {      
-        $("#result").html(`<p>You attacked ${defender.name} for ${ytotal} damage.</p>
+    if ( (yattack !== 0) && (eattack !== 0) && (processStatus === 'attack') ) {      
+        $("#result").html(`<p>You attacked ${defender.name} for ${(yattack*yattackCount)} damage.</p>
                            <p>${defender.name} attacked you back for ${eattack} damage.</p>`)
     }
 
-    if (character.hp <= 0) {
-        $("#result").html(`<p>You been defeated... GAME OVER!!!</p>`)
-    }  
-    else if (defender.hp <= 0){
-        $("#result").html(`<p>You have defated ${killed.name}, you can choose to fight another enemy</p>`)
+    if (processStatus === 'completed'){
+        $("#result").html(`<p>You have defated ${killedname}, you can choose to fight another enemy</p>`)
+        processStatus = 'standby';
     }
 
-
     if (gameover){
+        if (gamestatus === 'lose'){
+            $("#result").html(`<p id="pRed">You been defeated... GAME OVER!!!</p>`)
+        }
+        else if (gamestatus === 'win'){
+            $("#result").html(`<p id="pOrange">You Won !!! You may restart a new game.</p>`)
+        }
+        
         $("#restart").html(`<button onclick="reset()">Restart</button>`)      
     }
 }
 
 // When click on Attack button
 function attack(){    
-    if (defender.length === 0) {
-        $("#result").html(`<p>No enemy here.</p>`)
-    }
-    else {
-        if (yattack === 0 ){
-            yattack = Math.floor(Math.random() * 25) + 1
-            console.log(yattack)
+    if (!gameover){
+        if (defender.length === 0) {
+            $("#result").html(`<p id="pRed">No enemy here.</p>`)
         }
-        if (eattack === 0 ){
-            eattack = Math.floor(Math.random() * 25) + 1
-            console.log(eattack)
+        else {
+            if (processStatus === 'standby'){
+                killedname = '';
+                processStatus = 'attack'
+                yattack = Math.floor(Math.random() * 25) + 1
+                console.log('Your random attack: ' + yattack)
+                eattack = Math.floor(Math.random() * 25) + 1
+                console.log('Defender random attack: ' + eattack)            
+            }
+
+            yattackCount++;
+            console.log('Your attack count: ' + yattackCount)
+            character.hp = character.hp - eattack
+            defender.hp = defender.hp - (yattack*yattackCount)      
         }
-
-        ytotal = ytotal + yattack;
-
-        character.hp = character.hp - eattack
-        defender.hp = defender.hp - yattack      
+        
+        if (character.hp <= 0) {
+            gameover = true
+            gamestatus = 'lose'
+            processStatus = 'standby'
+        }  
+        else if ( (enemiesList.length > 0) && (defender.hp <= 0) ){
+            processStatus = 'completed'
+            killedname = defender.name
+            defender = ''
+        }
+        else if ( (enemiesList.length <= 0) && (defender.hp <= 0) ){
+            gameover = true
+            gamestatus = 'win'
+            processStatus = 'standby'
+            killedname = defender.name
+            defender = ''
+        }
+        updateDisplay()
     }
-    
-    if (character.hp <= 0) {
-        gameover = true;
-    }  
-    else if (defender.hp <= 0){
-        killed = defender
-    }
-
-    updateDisplay()
 }
 
 // Main Program Logic
@@ -162,6 +184,7 @@ $(document).on("click", ".icon-c", function(){
     if (character.length === 0 ) {
         // set your character
         character = characterList[$(this).attr("data-iconc")];
+        console.log('Your character: ' + character.name)
 
         // set your enemies
         for (let i = 0; i < characterList.length; i++) {
@@ -178,6 +201,7 @@ $(document).on('click', ".icon-e", function () {
     if (defender.length === 0 ) {
         // set your defender
         defender = enemiesList[$(this).attr("data-icone")];
+        console.log('Your defender: ' + defender.name)
 
         // update your enemies
         for(let i = enemiesList.length-1; i >= 0; i--){  
@@ -185,6 +209,7 @@ $(document).on('click', ".icon-e", function () {
                 enemiesList.splice(i,1);                
             }
         }
+        //console.log(enemiesList)
     }
     updateDisplay();
  })

@@ -21,8 +21,18 @@ button {
 
 p {
     font-size: 20px;
-    color: white
+    color:white;
 }
+
+#pRed {
+    color: red
+}
+
+#pOrange {
+    color: blue;
+}
+
+
 
 .characterimg{
     align-content: center;
